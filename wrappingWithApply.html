@@ -1,0 +1,41 @@
+<html>
+<head>
+<title></title>
+<style>
+</style>
+</head>
+<body>
+
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+function wrap(f, context) {
+	return function() {
+		console.log("wrapped!");
+		return f.apply(context); // use apply() to pass 
+								 // a particular
+								 // "this" context
+								 // to a function call
+	};
+}
+
+var MyClass = function() {
+	this.name = "brap";
+	this.someFunction = function() {
+		return this.name;
+	};
+	this.someFunction_wrapped_noContext = wrap(this.someFunction, null);
+	this.someFunction_wrapped = wrap(this.someFunction, this);
+};
+
+var m = new MyClass();
+m.someFunction(); 						// "brap"
+m.someFunction_wrapped(); 				// "brap"     - outer function specified as context
+m.someFunction_wrapped_noContext();     // undefined  - outer function's vars are not in scope 
+
+</script>
+
+</body>
+</html>
