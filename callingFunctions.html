@@ -1,0 +1,106 @@
+<html>
+<head>
+<title></title>
+<style>
+</style>
+</head>
+<body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+	/* 
+	 ==============================================
+		Below are 5 ways to call a function
+	 ==============================================
+	*/
+
+	/* 
+	 ==============================================
+		1. GLOBAL function call
+	 ==============================================
+	*/
+	function makeArray(arg1, arg2){  
+		return [ this, arg1, arg2 ];  
+	}
+	makeArray(3,4);  	// returns [Window, 3, 4]
+
+	/* 
+	 ==============================================
+		2. indirect
+	 ==============================================
+	*/
+	var arrayMaker = {
+		someProperty: 'some value',
+		make: makeArray
+	};
+	arrayMaker.make(3,4);
+						// returns [arrayMaker, 3, 4]
+
+</script>
+<input type="button" value="Button 1" id="btn1"  />  
+<input type="button" value="Button 2" id="btn2"  />  
+<input type="button" value="Button 3" id="btn3"  onclick="buttonClicked();"/> 
+<script type="text/javascript">
+	function buttonClicked () {
+		var text = (this === window) ? 'window' : this.id;
+		alert( text );
+	}
+	var button1 = document.getElementById('btn1');
+	var button2 = document.getElementById('btn2');
+
+	/* 
+	 ==============================================
+		3. handler - assignment
+	 ==============================================
+	*/
+	btn1.onclick = buttonClicked;  // click: disaplys "btn1"
+
+	/* 
+	 ==============================================
+		4. handler - called within another handler
+	 ==============================================
+	*/
+	button2.onclick = function() {
+		buttonClicked();
+								  // click: displays "window",
+								  // as the global function is being
+								  // called directly
+
+								 // although... 
+		// alert(this.id)		 // this line would display "btn2"					  
+	};							  
+
+	/* 
+	 ==============================================
+		5. handler - assigned from tag (se btn3 above)
+	 ==============================================
+	*/
+								  // click: displays "window"
+
+	/* 
+	 ==============================================
+		6. apply() - the apply call lets you explicitly set this's context
+	 ==============================================
+	*/
+	var gasGuzzler = { year: 2008, model: 'Dodge Bailout' };
+	makeArray.apply( gasGuzzler, [ 3, 4]);
+								  // returns [gasGuzzler, 3, 4]
+	makeArray.apply( null, [3, 4]);
+								  // returns [window, 3, 4]
+	var someRandomContext = { bla: 1, argh: 2};								
+	makeArray.apply(someRandomContext, [3, 4]);
+								  // returns [someRandomContext, 3, 4]
+
+	/* 
+	 ==============================================
+		7. call() - like apply(), call() lets you explicitly set this's context
+	 ==============================================
+	*/
+	makeArray.call(someRandomContext, 3, 4);
+								// returns [someRandomContext, 3, 4]	
+
+</script>
+
+</body>
+</html>
