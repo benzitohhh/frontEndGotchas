@@ -5,9 +5,6 @@
 </style>
 </head>
 <body>
-<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.1.min.js"><\/script>')</script>
 
 <script type="text/javascript" charset="utf-8">
 
@@ -21,30 +18,11 @@ function transform(arr) {
     var res = [];
     for (var i = 0; i < arr.length; i++) {
         res[i] = function() {
-
-             //return arr[i]; // problem - i gets incremented to 2
-             
-             //var j = i;       // problem - j is only assigned when function is called, so will use incremented i (2)
+             //return arr[i]; // problem - i will always be (arr.length - 1).
+             //var j = i;       // problem - j is only assigned when function is called, so same problem as above.
              //return arr[j]; // problem - simiarly if j is declared at top of for loop
-             // UNDERLYING PROBLEM - our anonymous functions 'inherit'
-             //                      the variable i from the scope of transform(),
-             //                      and not the for loop
+             // UNDERLYING PROBLEM - the for-loop's "i" is in the scope of the closure.
         }
-    }
-    return res;
-}
-
-function transform2(arr) {
-    var res = [];
-    for (var i = 0; i < arr.length; i++) {
-        res[i] = function() {
-             var j = arr[i];
-             return j;
-             
-             // SAME PROBLEM HERE - our anonymous functions
-             //                     only evaluate j upon execution (not when the for loop runs),
-             //                     so they are using the i from the scope of transform()
-        };
     }
     return res;
 }
@@ -56,8 +34,7 @@ function transform3(arr) {
             return function() {
                 return arr[value];
             };
-        })(i); // THIS WORKS!! - solution is to call an intermediate inner anon function
-               //              - forces a seperate closure to be created for each function
+        })(i); // THIS WORKS - solution is to create an intermediate function, explicitly binding the correct value in its scope
     }
     return res;
 }
@@ -70,8 +47,7 @@ function transform4(arr) {
                 return arr[i];
             };
         })(i); // THIS ALSO WORKS - although it is more confusing to read than transform3
-               //                 - each returned function has an individual "i" closure
-               //                 - this overwrites the "i" from the for loop
+               //                 - The inner function's "i" overshadows the for-loops' "i"
     }
     return res;
 }
