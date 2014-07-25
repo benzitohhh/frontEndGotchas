@@ -27,7 +27,7 @@ function transform(arr) {
     return res;
 }
 
-function transform3(arr) {
+function transform2(arr) {
     var res = [];
     for (var i = 0; i < arr.length; i++) {
         res[i] = (function(value) {
@@ -39,20 +39,20 @@ function transform3(arr) {
     return res;
 }
 
-function transform4(arr) {
+function transform3(arr) {
     var res = [];
     for (var i = 0; i < arr.length; i++) {
         res[i] = (function(i) {
             return function() {
                 return arr[i];
             };
-        })(i); // THIS ALSO WORKS - although it is more confusing to read than transform3
+        })(i); // THIS ALSO WORKS - although it is more confusing to read than transform2
                //                 - The inner function's "i" overshadows the for-loops' "i"
     }
     return res;
 }
 
-function transform5(arr) {
+function transform4(arr) {
     var res = [];
     for (var i = 0; i < arr.length; i++) {
         res[i] = (function(val) {
@@ -65,7 +65,7 @@ function transform5(arr) {
 }
 
 var a = [1, "a", {c:123}];   
-var b = transform5(a);
+var b = transform4(a);
 
     
 </script>
